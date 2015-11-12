@@ -1,0 +1,91 @@
+<project name="MyProject" default="all" basedir=".">
+    <description>
+        A simple build script.
+    </description>
+  <!-- set global properties for this build -->
+  <!-- set glassfish.home to point to glassfish installation  -->  
+  <property environment="env"/>
+  <property name="glassfish.home" value="${env.GLASSFISH_HOME}"/>
+
+  <property name="entity" value="build/entity"/>
+  <property name="ejb" value="build/ejb"/>
+  <property name="client" value="build/client"/>
+
+  <target name="init">
+    <!-- Create the build directory structure -->
+    <mkdir dir="${entity}"/>
+    <mkdir dir="${ejb}"/>
+    <mkdir dir="${client}"/>
+  </target>
+
+  <target name="all">
+    <antcall target="clean"/>
+    <antcall target="build"/>
+    <antcall target="deploy"/>
+  </target>
+
+  <target name="build" description="build" depends="init">
+    <antcall target="build-entity"/>
+    <antcall target="build-ejb"/>
+    <antcall target="build-client"/>
+    <antcall target="build-jar"/>
+  </target>
+
+  <target name="build-entity"
+        description="Build entity beans" >
+    <javac classpath="${glassfish.home}/lib/javaee.jar" 
+           srcdir="src/entity"
+           destdir="."
+           includes="FinalUser.java,Message.java,MailBox.java"/>
+  </target>
+
+  <target name="build-ejb"
+        description="Build ejb jar" >
+    <javac classpath="${glassfish.home}/lib/javaee.jar:./entities.jar" 
+           srcdir="src/ejb"
+           destdir="."
+           includes="TestBean.java,Test.java"/>
+  </target>
+
+  <target name="build-client" 
+        description="Build client jar" >
+    <javac classpath="${glassfish.home}/lib/javaee.jar" 
+           srcdir="src/client"
+           destdir="."
+           includes="JavaClient.java"/>
+  </target>
+  
+  <target name="build-jar" 
+        description="Build jar archive" >
+    <jar destfile="mailBox.jar"
+         basedir="."
+	 includes="META-INF/persistence.xml,client/,ejb/,entity/"/>
+  </target>
+
+
+  <target name="deploy" 
+          description="deploy">
+    <exec executable="${glassfish.home}/bin/asadmin" 
+          failonerror="true" 
+          vmlauncher="false">
+      <arg line="deploy --retrieve . entityBeanExample.jar"/>
+    </exec>
+  </target>
+
+  <target name="undeploy" 
+          description="undeploy">
+    <exec executable="${glassfish.home}/bin/asadmin" 
+          failonerror="true" 
+          vmlauncher="false">
+      <arg line="undeploy entityBeanExample"/>
+    </exec>
+  </target>
+
+  <target name="clean" 
+          description="clean up" >
+    <delete file="mailBox.jar"/>
+    <delete dir="build"/>
+    
+  </target>
+
+</project>
