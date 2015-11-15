@@ -1,6 +1,7 @@
 package entity;
 
 import javax.persistence.*;
+import static javax.persistence.CascadeType.*;
 
 @Entity
 public class FinalUser {

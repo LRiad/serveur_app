@@ -36,6 +36,7 @@ public class JavaClient{
 			{
 				clearScreen();
 				System.out.println("Choisissez votre catégorie (Tappez 1,2 ou 3):\n1-Administrateur\n2-Simple Utilisateur\n3-Quitter l'application");
+				System.out.print("Votre choix : ");
 				int usr = entree.nextInt();
 				clearScreen();
 				if (usr==1)
@@ -58,14 +59,15 @@ public class JavaClient{
 							String util = entree.next();
 							System.out.print(sb.addUser(util));
 							System.out.println(sb.addBox(util+"Box",util));
-							Thread.sleep(3000);
+							Thread.sleep(2222);
 
 						}else if(action==2)
 						{
+							System.out.println(sb.affichFinalUser());
 							System.out.print("Entrez le nom de l'utilisateur : ");
 							String util2 = entree.next();
-							System.out.println(sb.addUser(util2));
-							Thread.sleep(3000);
+							System.out.println(sb.removeUser(util2));
+							Thread.sleep(2222);
 						}else
 						{
 							b=false;
@@ -76,6 +78,7 @@ public class JavaClient{
 
 				}else if (usr==2)
 				{
+					System.out.println(sb.affichFinalUser());
 					System.out.print("Quel est votre nom : ");
 					String owner = entree.next();
 					boolean c=true;
@@ -86,9 +89,11 @@ public class JavaClient{
 						System.out.println("1-Envoyer un message ");
 						System.out.println("2-Lire un message ");
 						System.out.println("3-Supprimer un message ");
-						System.out.println("4-Ajouter mailbox ");
-						System.out.println("5-Supprimer une mailbox ");
-						System.out.println("6-Retourner au menu principale ");
+						System.out.println("4-Supprimer tout les messages ");
+						System.out.println("5-Supprimer tout les messages lus ");
+						System.out.println("6-Ajouter une mailbox ");
+						System.out.println("7-Supprimer une mailbox ");
+						System.out.println("8-Retourner au menu principale ");
 						System.out.print("Votre choix : ");
 						int action = entree.nextInt();
 						if (action==1)
@@ -103,11 +108,12 @@ public class JavaClient{
 							System.out.print("Entrez le corps du mail : ");
 							String body = entree2.readLine();
 							clearScreen();
+							System.out.println(sb.affichMailbox(receiverName));
 							System.out.print("Entrez le nom de la mailbox : ");
 							String mail = entree2.readLine();
 							clearScreen();
 							System.out.println(sb.sendAMessageToBox (owner,receiverName,subject,body,mail));
-							Thread.sleep(3000);
+							Thread.sleep(2222);
 						}else if(action==3)
 						{
 							clearScreen();
@@ -116,7 +122,7 @@ public class JavaClient{
 							int id = entree.nextInt();
 							clearScreen();
 							System.out.println(sb.removeMessage(id));
-							Thread.sleep(3000);						
+							Thread.sleep(2222);						
 						}else if (action==2)
 						{
 							clearScreen();
@@ -133,21 +139,37 @@ public class JavaClient{
 
 						}else if (action==4)
 						{
+							clearScreen();
+							System.out.println(sb.deleteAUserMessages(owner));
+
+							Thread.sleep(2222);
+
+						}else if (action==5)
+						{
+							clearScreen();
+							System.out.println(sb.deleteAUserReadMessages(owner));
+
+							Thread.sleep(2222);
+
+						}else if (action==6)
+						{
+							clearScreen();
 							System.out.print("Entrez le nom de la mailbox : ");
 							String box = entree.next();
+							clearScreen();
 							System.out.print(sb.addBox(box,owner));
+							Thread.sleep(2222);
 
-							Thread.sleep(3000);
-
-						}else if(action==5)
+						}else if(action==7)
 						{
 							clearScreen();
 							System.out.println(sb.affichMailbox(owner));
-							System.out.print("Entrez le numéro de la mailbox : \n");
-							int id = entree.nextInt();
+							System.out.print("Entrez le numero de la mailbox : \n");
+							int nm = entree.nextInt();
 							clearScreen();
-							System.out.println(sb.removeMailbox(id));
-							Thread.sleep(3000);						
+							System.out.println(sb.deleteAUserMessages(nm));
+							System.out.println(sb.removeMailbox(nm));
+							Thread.sleep(2222);						
 						}else 
 						{
 							c=false;
@@ -158,7 +180,7 @@ public class JavaClient{
 
 
 
-				}else{System.out.println("Au revoir!!");Thread.sleep(3000);clearScreen();app=false;}
+				}else{System.out.println("Au revoir!!");Thread.sleep(2222);clearScreen();app=false;}
 
 
 			}

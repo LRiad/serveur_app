@@ -54,12 +54,35 @@ public class TestBean implements Test{
 	/* Suppression d'un utilisateur */	
 	public String removeUser(String name)
 	{
-		FinalUser fu=findUser(name);		
+
+		FinalUser fu=findUser(name);
+		removeMailbox(fu.getBox().getId());		
 		FinalUser fu0=em.merge(fu);
 		em.remove (fu0);
 		return "L'utilisateur "+fu.getName()+" a bien été supprimé!!\n";
 	};
 
+	/*Selection de tout les utilisateurs*/
+	public List<FinalUser> selectFinalUser()
+	{
+		Query q = em.createQuery("select m from FinalUser m");
+        	return q.getResultList();
+
+	}
+
+
+	/*Affichage des utilisateurs*/
+	public String affichFinalUser()
+	{
+		String result="Liste des utilisateur :\nNumero\tNom\n";
+		List<FinalUser> finalusers=selectFinalUser();
+		for(FinalUser usr:finalusers)
+		{	
+
+			result+=usr.getId()+"\t"+usr.getName()+"\n";
+		} 
+		return result;
+	}
 
 /************************************************************************************************/
 /*				Fonctions liées aux Messages					*/
@@ -129,9 +152,8 @@ public class TestBean implements Test{
 	/*Selection de tout les messages*/
 	public List<Message> selectMessages(String usr)
 	{
-		FinalUser fu=findUser(usr);
-		Query q = em.createQuery("select m from Message m where m.mailBox = :box");
-		q.setParameter("box",fu.getBox());
+		Query q = em.createQuery("select m from Message m where m.receiverName = :name");
+		q.setParameter("name",usr);
         	return q.getResultList();
 
 	}	
@@ -149,6 +171,40 @@ public class TestBean implements Test{
 		} 
 		return result;
 	}
+
+	/* Suppression de tout les messages */	
+	public String deleteAUserMessages(String receiverName){
+		Query q = em.createQuery("delete from Message m where m.receiverName = :receiverName");
+		q.setParameter("receiverName",receiverName);
+		q.executeUpdate();
+		return "Les messages ont été supprimé avec succès";
+	}
+
+
+	/* Suppression des messages lus */
+	public String deleteAUserReadMessages(String receiverName){
+		Query q = em.createQuery("delete from Message m where m.receiverName = :receiverName and m.alreadyRead = :alreadyRead");
+		q.setParameter("receiverName",receiverName);
+		q.setParameter("alreadyRead",true);
+		q.executeUpdate();
+		return "Les messages ont été supprimé avec succès";
+	}
+
+
+
+	/* Suppression de tout les messages par id box */	
+	public String deleteAUserMessages(int mailbox){
+		Query q = em.createQuery("delete from Message m where m.mailBox = :mailBox");
+		q.setParameter("mailBox",findMailbox(mailbox));
+		q.executeUpdate();
+		return "Les messages ont été supprimé avec succès";
+	}
+
+
+
+
+
+
 
 
 /************************************************************************************************/
@@ -174,14 +230,24 @@ public class TestBean implements Test{
 		MailBox m=findMailbox(name);		
 		MailBox m0=em.merge(m);
 		em.remove (m);
-		return "La mailbox a bien été supprimé!!\n";
+		return "La mailbox "+ name +" a bien été supprimé!!\n";
 	}
 
+	/* Supression d'une mailbox par l'Id */
 	public String removeMailbox(int id)
 	{
-		MailBox m=findMailbox(id);		
+		MailBox m=findMailbox(id);
+
+		Query q2 = em.createQuery("select u from FinalUser u where u.box = :box");
+		q2.setParameter("box",m);
+		FinalUser fu=(FinalUser)q2.getSingleResult();
+		fu.setBox(null);
+
+		deleteAUserMessages(id);		
+		
+		String mm=m.getName();		
 		removeMailbox(m.getName());
-		return "La mailbox a bien été supprimé!!\n";
+		return "La mailbox "+mm+" a bien été supprimé!!\n";
 	}
 
 	/* Recherche d'une mailbox */

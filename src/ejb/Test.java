@@ -12,6 +12,8 @@ public interface Test{
 	public String verifyInsert(String name); 
 	public FinalUser findUser(String name);
 	public String removeUser(String name);
+	public String affichFinalUser();
+	public List<FinalUser> selectFinalUser();
 
 
 	public String addBox(String boxName,String name);
@@ -23,6 +25,7 @@ public interface Test{
 	public List<MailBox> selectMailbox(String usr);
 
 
+
 	public String sendAMessageToBox ( String senderName,String receiverName, String subject, String body,String mailbox);
 	public Message findMessage(int id);
 	public String formatMessage(Message m);
@@ -30,5 +33,8 @@ public interface Test{
 	public String removeMessage(int id);
 	public String affichMessages(String usr);
 	public List <Message> selectMessages(String usr);
+	public String deleteAUserMessages(String receiverName);
+	public String deleteAUserReadMessages(String receiverName);
+	public String deleteAUserMessages(int mailbox);
 
 }
