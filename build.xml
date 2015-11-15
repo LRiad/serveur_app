@@ -7,9 +7,9 @@
   <property environment="env"/>
   <property name="glassfish.home" value="${env.GLASSFISH_HOME}"/>
 
-  <property name="entity" value="build/entity"/>
-  <property name="ejb" value="build/ejb"/>
-  <property name="client" value="build/client"/>
+  <property name="entity" value="entity"/>
+  <property name="ejb" value="ejb"/>
+  <property name="client" value="client"/>
 
   <target name="init">
     <!-- Create the build directory structure -->
@@ -36,7 +36,7 @@
     <javac classpath="${glassfish.home}/lib/javaee.jar" 
            srcdir="src/entity"
            destdir="."
-           includes="FinalUser.java,Message.java,MailBox.java"/>
+           includes="FinalUser.java, Message.java, MailBox.java"/>
   </target>
 
   <target name="build-ejb"
@@ -68,7 +68,7 @@
     <exec executable="${glassfish.home}/bin/asadmin" 
           failonerror="true" 
           vmlauncher="false">
-      <arg line="deploy --retrieve . entityBeanExample.jar"/>
+      <arg line="deploy --retrieve . mailBox.jar"/>
     </exec>
   </target>
 
@@ -77,7 +77,7 @@
     <exec executable="${glassfish.home}/bin/asadmin" 
           failonerror="true" 
           vmlauncher="false">
-      <arg line="undeploy entityBeanExample"/>
+      <arg line="undeploy mailBox"/>
     </exec>
   </target>
 
@@ -85,7 +85,11 @@
           description="clean up" >
     <delete file="mailBox.jar"/>
     <delete dir="build"/>
-    
+    <delete dir="${entity}"/>
+    <delete dir="${ejb}"/>
+    <delete dir="${client}"/>
+
+
   </target>
 
 </project>

@@ -1,9 +1,11 @@
 package entity;
 import javax.persistence.*;
 import java.util.Date;
+import entity.*;
+import javax.ejb.*;
 
 @Entity
-@Table(name="Message_Table")
+//@Table(name="Message_Table")
 public class Message{
 	private int id;
 	private String senderName;
@@ -12,9 +14,10 @@ public class Message{
 	private String body;
 	private boolean alreadyRead;
 	private Date sendingDate; 
-	private MailBox mailbox;
+	private MailBox mailBox;
 
 	@Id
+	@GeneratedValue ( strategy = GenerationType.IDENTITY )
 	@Column(name="Message_Id")
 	public int getId(){
 		return id;
@@ -80,19 +83,19 @@ public class Message{
 
 
 	@Column(name = "alreadyRead")
-	public void getAlreadyRead(){
-		return this.alreadyRead;
+	public boolean getAlreadyRead(){
+		return alreadyRead;
 	}
 	
-	public void setAlreadyRead(){
-		this.alreadyRead=true;
+	public void setAlreadyRead(boolean a){
+		this.alreadyRead=a;
 	} 
 
 
 	@ManyToOne()
-	@JoinColumn(name="mailBox_Id")
+	@JoinColumn(referencedColumnName="id")
 	public MailBox getMailBox(){
-		return this.mailBox;
+		return mailBox;
 	}
 
 	public void setMailBox(MailBox box){

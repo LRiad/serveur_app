@@ -4,9 +4,11 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.Collection;
 import java.util.ArrayList;
+import java.io.Serializable;
+import static javax.persistence.CascadeType.*;
 
 @Entity
-public class MailBox{
+public class MailBox implements Serializable{
 
 
 
@@ -17,16 +19,17 @@ public class MailBox{
 
 	
 	private Collection <Message> messages;
+	private FinalUser usr;
 
-
-	@Id	
+	@Id
+	@GeneratedValue ( strategy = GenerationType.IDENTITY )	
 	@Column(name = "id")	 		
-	public long getId(){
+	public int getId(){
 		return this.id;
 	} 	
 
 	
-	public void setId(long id){
+	public void setId(int id){
 		this.id=id;
 	}
 	
@@ -55,8 +58,17 @@ public class MailBox{
 	}
 
 
-	
+	@OneToOne()
+	@JoinColumn(name="finalUserId",referencedColumnName="id")
+	public FinalUser getUsr()
+	{
+		return this.usr;
+	}
 
+	public void setUsr(FinalUser usr)
+	{
+		this.usr=usr;
+	}
 	
 
 

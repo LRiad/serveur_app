@@ -2,28 +2,39 @@ package entity;
 
 import javax.persistence.*;
 
-@Entity(name = "FinalUser")
+@Entity
 public class FinalUser {
 	
 
 	private int id;
 	private String Name;
+	private MailBox box;
 
 	
 	@Id
+	@GeneratedValue ( strategy = GenerationType.IDENTITY )	
 	@Column(name = "id")	 
-	public long getId(){
+	public int getId(){
 		return this.id;
 	}
 
 
-	public void setId(long id){
+	public void setId(int id){
 		this.id=id;
 	}
 	
-	 	
+
+	@OneToOne()
+	@JoinColumn(name="MailBoxId",referencedColumnName="id")
+	public MailBox getBox()
+	{
+		return this.box;
+	}
+	public void setBox(MailBox box)
+	{
+		this.box=box;
+	} 
 	
-	@Column(name = "Name")
 	public String getName() {
 		return this.Name;
 	}

@@ -2,46 +2,44 @@ package entity;
 
 import javax.persistence.*;
 
-@Entity(name = "FinalUser")
+@Entity
 public class FinalUser {
 	
-	@Id
-	@GeneratedValue ( strategy = GenerationType.IDENTITY )
-	@Column(name = "id")	
+
 	private int id;
+	private String Name;
+	private MailBox box;
 
-	@Column(name = "userName")
-	private String userName ;
-
 	
-	
-	
-	public FinalUser() {
-		super();
-	}
-	
-	public FinalUser(String userName) {
-		super();
-		this.setUserName(userName);
+	@Id
+	@Column(name = "id")	 
+	public int getId(){
+		return this.id;
 	}
 
 
-
-	public void setId(long id){
+	public void setId(int id){
 		this.id=id;
 	}
-	 
-	public long getId(){
-		return this.id;
-	} 	
 	
 
-	public String getUserName() {
-		return userName;
+	@OneToOne()
+	@JoinColumn(name="MailBoxId",referencedColumnName="id")
+	public MailBox getBox()
+	{
+		return this.box;
+	}
+	public void setBox(MailBox box)
+	{
+		this.box=box;
+	} 
+	
+	public String getName() {
+		return this.Name;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setName(String Name) {
+		this.Name = Name;
 	}
 	
 	
